@@ -1,0 +1,242 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Imenik</title>
+
+    <style type="text/css">
+        .ui-outputlabel {
+            font-weight: bold;
+        }
+
+        .ui-orderlist .ui-orderlist-list {
+            height: auto;
+        }
+
+        table tr {
+            cursor: pointer;
+        }
+
+        growl {
+            right: -300px;
+            top: 250%;
+        }
+    </style>
+</h:head>
+
+<h:body style="background-color: #001f3f;">
+    <p:dialog id="dialog" header="Posodobi kontakt" widgetVar="dlg1" showEffect="explode" hideEffect="bounce"
+              height="250">
+        <div>
+            <h:form id="dialog-form" class="data-form">
+                <div class="ui-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-6">
+                        <h:inputHidden id="id-update" value="${contact.id}"/>
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <p:outputLabel for="firstname-update" value="Ime"/>
+                        <p:inputText id="firstname-update" value="${contact.name}"/>
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <p:outputLabel for="lastname-update" value="Priimek"/>
+                        <p:inputText id="lastname-update" value="${contact.lastName}"/>
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <p:outputLabel for="email-update" value="Email"/>
+                        <p:inputText id="email-update" value="${contact.email}"/>
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <p:outputLabel for="phone-update" value="Telefon"/>
+                        <p:inputText id="phone-update" value="${contact.phone}"/>
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <p:outputLabel for="mobile-update" value="Mobilni"/>
+                        <p:inputText id="mobile-update" value="${contact.mobile}"/>
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <p:outputLabel for="address-update" value="Naslov"/>
+                        <p:inputTextarea id="address-update" value="${contact.address}"/>
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <p:outputLabel for="description-update" value="Pripombe"/>
+                        <p:inputTextarea id="description-update" value="${contact.description}"/>
+                    </div>
+                    <div>
+                        <p:commandButton value="Send" icon="pi pi-refresh"
+                                         action="${apiService.updateContact(contact)}"/>
+                    </div>
+                </div>
+            </h:form>
+        </div>
+    </p:dialog>
+    <p:layout style="width: 75%; height: 880px; margin: auto auto;">
+        <p:layoutUnit position="north" size="180">
+            <p:panel>
+                <p:tabView>
+                    <p:tab title="Sistemske informacije">
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <p:graphicImage name="demo/images/godfather/godfather1.jpg"/>
+                            <h:outputText
+                                    value="Credentials for ImenikAPI service > USERNAME = srcuser, PASSWORD = srcpwd."/>
+                        </h:panelGrid>
+                    </p:tab>
+                    <p:tab title="Navodila">
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <p:graphicImage name="demo/images/godfather/godfather2.jpg"/>
+                            <h:outputText value="Web aplikacija je testirana na Wildfly serverju (wildfly-18.0.0.Final).\n Potrebno je dodati novi kontakt ter preveriti tab za listo kontaktov.
+                                                 Ce je kontakt uspesno dodan, v tabeli so gumbi za brisanje in posodobitev kontaktov.\n
+                                                 V tabu Posamezni kontakt je mozno preveriti kontakt na podlagi id atributa.\n
+                                                 Za komunikacijo z REST WS je potrebna autentifikacija in autorizacija. Za ta namen so na strani web aplikacije kreirani default username in password. Na REST strani je uporabnik registriran v podatkovni bazi.
+                                                 Podatkovna baza je embeded (h2)."/>
+                        </h:panelGrid>
+                    </p:tab>
+                    <p:tab title="Autor">
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <p:graphicImage name="demo/images/godfather/godfather3.jpg"/>
+                            <h:outputText value="Samir Ahmetspahic, Vrtnarija 5c, 1360 Vrhnika."/>
+                        </h:panelGrid>
+                    </p:tab>
+                </p:tabView>
+            </p:panel>
+        </p:layoutUnit>
+        <p:layoutUnit position="west" size="200" resizable="true">
+            <div style="width: 100%; height: 100%; background-image: url('https://ak.picdn.net/shutterstock/videos/5130656/thumb/1.jpg'); background-position: center; background-size: auto;">
+
+            </div>
+        </p:layoutUnit>
+        <p:layoutUnit position="center" resizable="true" style="height: 600px; width: 45%">
+            <p:tabView dynamic="true" cache="true" effect="fold">
+                <p:tab title="Dodaj kontakt">
+                    <h:panelGrid columns="4" cellpadding="20" style="min-width: 70%; min-height: 70%;">
+                        <p:panel id="horizontal" header="Novi kontakt" toggleable="false"
+                                 toggleOrientation="horizontal">
+                            <h:form>
+                                <div class="ui-fluid p-formgrid p-grid">
+                                    <div class="p-field p-col-12 p-md-6">
+                                        <p:outputLabel for="firstname" value="Ime"/>
+                                        <p:inputText id="firstname" value="${contact.name}"/>
+                                    </div>
+                                    <div class="p-field p-col-12 p-md-6">
+                                        <p:outputLabel for="lastname" value="Priimek"/>
+                                        <p:inputText id="lastname" value="${contact.lastName}"/>
+                                    </div>
+                                    <div class="p-field p-col-12 p-md-6">
+                                        <p:outputLabel for="email" value="Email"/>
+                                        <p:inputText id="email" value="${contact.email}"/>
+                                    </div>
+                                    <div class="p-field p-col-12 p-md-6">
+                                        <p:outputLabel for="phone" value="Telefon"/>
+                                        <p:inputText id="phone" value="${contact.phone}"/>
+                                    </div>
+                                    <div class="p-field p-col-12 p-md-6">
+                                        <p:outputLabel for="mobile" value="Mobilni"/>
+                                        <p:inputText id="mobile" value="${contact.mobile}"/>
+                                    </div>
+                                    <div class="p-field p-col-12 p-md-6">
+                                        <p:outputLabel for="address" value="Naslov"/>
+                                        <p:inputTextarea id="address" value="${contact.address}"/>
+                                    </div>
+                                    <div class="p-field p-col-12 p-md-6">
+                                        <p:outputLabel for="description" value="Pripombe"/>
+                                        <p:inputTextarea id="description" value="${contact.description}"/>
+                                    </div>
+                                    <div>
+                                        <p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+                                                  closable="false" resizable="false" showHeader="false">
+                                            <p:graphicImage name="/demo/images/ajaxloadingbar.gif"/>
+                                        </p:dialog>
+                                        <p:commandButton value="Send" icon="pi pi-refresh"
+                                                         action="${apiService.addContact(contact)}"/>
+                                    </div>
+                                </div>
+                            </h:form>
+                        </p:panel>
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Kontaktna lista" id="contact-list">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <p:panel id="datatable" header="Kontakt lista" toggleable="true" toggleOrientation="horizontal">
+                            <h:form>
+                                <p:dataTable id="conctact-list" var="api" value="#{apiService.contactList}"
+                                             selection="${contact}"
+                                             editable="true">
+                                    <p:column headerText="id" class="tableRow">
+                                        <h:outputText value="#{api.id}" size="10" rendered="true"/>
+                                    </p:column>
+
+                                    <p:column headerText="Ime" class="tableRow">
+                                        <h:outputText value="#{api.name}" size="10" rendered="true"/>
+                                    </p:column>
+
+                                    <p:column headerText="Priimek" class="tableRow">
+                                        <h:outputText value="#{api.lastName}" size="10" rendered="true"/>
+                                    </p:column>
+
+                                    <p:column headerText="Email" class="tableRow">
+                                        <h:outputText value="#{api.email}" size="10" rendered="true"/>
+                                    </p:column>
+
+                                    <p:column headerText="Telefon" class="tableRow">
+                                        <h:outputText value="#{api.phone}" size="10" rendered="true"/>
+                                    </p:column>
+
+                                    <p:column headerText="Mobilni" class="tableRow">
+                                        <h:outputText value="#{api.mobile}" size="10" rendered="true"/>
+                                    </p:column>
+
+                                    <p:column headerText="Naslov" class="tableRow">
+                                        <h:outputText value="#{api.address}" size="10" rendered="true"/>
+                                    </p:column>
+                                    <p:column headerText="Pripombe" class="tableRow">
+                                        <h:outputText value="#{api.description}" size="50" rendered="true"/>
+                                    </p:column>
+
+                                    <p:column headerText="Delete">
+                                        <f:facet name="header">
+                                            <h:outputText value="Delete"/>
+                                        </f:facet>
+                                        <h:commandButton value="Delete" action="#{apiService.deleteContact(api)}"
+                                                         style="margin-right:20px;color: darkred"/>
+                                    </p:column>
+                                    <p:column headerText="Update">
+                                        <f:facet name="header">
+                                            <h:outputText value="Update"/>
+                                        </f:facet>
+                                        <p:commandButton value="Update" onclick="PF('dlg1').show();"
+                                                         actionListener="${defaultImenikAPIService.setSelected(api)}"
+                                                         style="margin-right:20px;"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:form>
+                        </p:panel>
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Posamezni kontakt" id="contact-list-single">
+                    <div>
+                        <h:form id="single-form">
+                            <p:column headerText="Id">
+                                <h:inputText id="get-by-id" value="${contact.id}"/>
+                            </p:column>
+                            <p:column headerText="">
+                                <p:commandButton id="ajax" update="growl" value="Najdi"
+                                                 actionListener="#{defaultImenikAPIService.getContact(contact)}">
+                                    <h:outputText value="${contact.name}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </h:form>
+                    </div>
+                </p:tab>
+            </p:tabView>
+            <br/>
+        </p:layoutUnit>
+    </p:layout>
+    <div style="left: -50%;">
+        <p:growl id="growl" life="7000" sticky="true"/>
+    </div>
+</h:body>
+</html>

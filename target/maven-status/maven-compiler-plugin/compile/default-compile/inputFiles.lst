@@ -1,0 +1,5 @@
+/home/samir/IdeaProjects/TelefonskiImenikApp/TelefonskiImenikApp/src/main/java/org/imenik/web/converter/ImenikJsonConverter.java
+/home/samir/IdeaProjects/TelefonskiImenikApp/TelefonskiImenikApp/src/main/java/org/imenik/web/service/impl/ImenikAPIService.java
+/home/samir/IdeaProjects/TelefonskiImenikApp/TelefonskiImenikApp/src/main/java/org/imenik/web/service/impl/DefaultImenikAPIService.java
+/home/samir/IdeaProjects/TelefonskiImenikApp/TelefonskiImenikApp/src/main/java/org/imenik/web/model/Contact.java
+/home/samir/IdeaProjects/TelefonskiImenikApp/TelefonskiImenikApp/src/main/java/org/imenik/web/exception/NullContactException.java
